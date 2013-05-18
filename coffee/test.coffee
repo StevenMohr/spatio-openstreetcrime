@@ -26,7 +26,7 @@ $(document).ready ->
               ]
   }
   geojson_format = new OpenLayers.Format.GeoJSON()
-  vector_layer = new OpenLayers.Layer.Vector "Berlin Districts", { projection: epsg4326 }
+  vector_layer = new OpenLayers.Layer.Vector "Berlin Districts"
 
   map.addLayer(vector_layer)
   vector_layer.addFeatures(geojson_format.read(featurecollection))

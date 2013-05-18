@@ -40,9 +40,7 @@
       ]
     };
     geojson_format = new OpenLayers.Format.GeoJSON();
-    vector_layer = new OpenLayers.Layer.Vector("Berlin Districts", {
-      projection: epsg4326
-    });
+    vector_layer = new OpenLayers.Layer.Vector("Berlin Districts");
     map.addLayer(vector_layer);
     return vector_layer.addFeatures(geojson_format.read(featurecollection));
   });
