@@ -9,37 +9,37 @@ DistrictMap =
   district_layer: undefined
 
   initialize: () ->
-    @.map = new OpenLayers.Map {div: 'map', projection: new OpenLayers.Projection 'EPSG:900313'}
-    osm_layer = new OpenLayers.Layer.OSM()
-    @.map.addLayer osm_layer
+    epsg4326 = new OpenLayers.Projection('EPSG:4326')
+    epsg900913 = new OpenLayers.Projection('EPSG:900913')
 
+    @.map = new OpenLayers.Map('map', projection: epsg900913, displayProjection: epsg4326)
+    layer = new OpenLayers.Layer.OSM()
+    @.map.addLayer layer
+    @.map.setCenter(new OpenLayers.LonLat(13, 52).transform(epsg4326, epsg900913), 8)
+
+    vector_layer = new OpenLayers.Layer.Vector "Berlin Districts"
     @.add_district_layer()
-    get_location()
 
   center_map: (center_x, center_y) ->
     @.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8)
 
   add_district_layer: () ->
-    @.district_layer = new OpenLayers.Layer.Vector "Berlin Districts", {projection: new OpenLayers.Projection 'EPSG:900313'}
+    geojson_format = new OpenLayers.Format.GeoJSON()
+    @.district_layer = new OpenLayers.Layer.Vector "Berlin Districts"
     @.district_layer.removeAllFeatures()
-    @.district_layer.addFeatures(MapData.district_features())
+    features = geojson_format.read(MapData.district_feature_collection())
+    @.district_layer.addFeatures features
     @.map.addLayer @.district_layer
 
 MapData =
   map_data: []
   weighted: false
-  district_features: ->
-    relevant_count = (if (@.weighted) then 'weighted_count' else 'count')
-    #in_options = {internalProjection: new OpenLayers.Projection('EPSG:4326'), externalProjection: new OpenLayers.Projection('EPSG:900913') }
-    geojson_parser = new OpenLayers.Format.GeoJSON #in_options
-    features = []
-
+  district_feature_collection: ->
+    featurecollection = {"type": "FeatureCollection", "features": [{"geometry": { "type": "GeometryCollection", "geometries": []}, "type": "Feature", "properties": {}}]}
     for district in @map_data
-      style = MapStyle.style(0) #@.district_color(district[0]))
-      geojson_polygon = geojson_parser.read(district['area'])
-      geojson_polygon.style = style
-      features.push geojson_polygon
-    features
+      district_feature = district['area']
+      featurecollection.features[0].geometry.geometries.push district_feature
+    featurecollection
 
   district_color: (count) ->
     colors =['#00ff00', '#ffff00', '#df7401', '#df0101']
@@ -91,16 +91,6 @@ MapControls =
       $("#quantil#{i}").text("less than #{quantil}")
       i++
     $("#quantil3").text("greater than or equal to #{quantils[2]}")
-
-
-get_location = () ->
-  if navigator.geolocation
-    navigator.geolocation.getCurrentPosition show_position
-
-show_position = (position) ->
-  DistrictMap.center_map  position.coords.longitude, position.coords.latitude
-
-
 
 GeoReceiver =
   init: () ->
