@@ -96,10 +96,18 @@ GeoReceiver =
   init: () ->
     settings =
       dataType: 'jsonp'
-      url: "#{server_url}/api/v1/communities/?state__name=Berlin"
+      url: "#{server_url}/api/v1/districts/?community__state__name=Berlin"
       success: GeoReceiver.process_districts
     $.ajax settings
 
   process_districts: (data) =>
-    MapData.map_data =  data['objects']
-    DistrictMap.initialize()
+    MapData.map_data = MapData.map_data.concat data['objects']
+    console.log data.meta
+    if data.meta.next?
+      settings =
+      dataType: 'jsonp'
+      url: server_url + data.meta.next
+      success: GeoReceiver.process_districts
+      $.ajax settings
+    else
+      DistrictMap.initialize()
