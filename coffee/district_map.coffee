@@ -24,10 +24,10 @@ DistrictMap =
     @.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8)
 
   add_district_layer: () ->
-    geojson_format = new OpenLayers.Format.GeoJSON()
+
     @.district_layer = new OpenLayers.Layer.Vector "Berlin Districts"
     @.district_layer.removeAllFeatures()
-    features = geojson_format.read(MapData.district_feature_collection())
+    features = MapData.district_feature_collection()
     @.district_layer.addFeatures features
     @.map.addLayer @.district_layer
 
@@ -35,14 +35,21 @@ MapData =
   map_data: []
   weighted: false
   district_feature_collection: ->
-    featurecollection = {"type": "FeatureCollection", "features": [{"geometry": { "type": "GeometryCollection", "geometries": []}, "type": "Feature", "properties": {}}]}
+    featurecollection = []
+    geojson_format = new OpenLayers.Format.GeoJSON()
     for district in @map_data
-      district_feature = district['area']
-      featurecollection.features[0].geometry.geometries.push district_feature
+      feature = {"geometry": null, "type": "Feature", "properties": {}}
+      style = MapStyle.style(@.district_color(ReportReceiver.crime_stat[district.resource_uri]))
+      feature.geometry = district['area']
+      feature = geojson_format.parseFeature feature
+      feature.style = style
+      featurecollection.push feature
     featurecollection
 
   district_color: (count) ->
-    colors =['#00ff00', '#ffff00', '#df7401', '#df0101']
+    colors =['#00ff00', '#ffff00', '#df7401', "#ff0000" ]
+    if not count?
+      count = 0
     i = 0
     for quantil in @.quantils()
       if count < quantil
@@ -52,9 +59,9 @@ MapData =
 
   quantils: ->
     if @.weighted
-      return [5] #$('#map').data('quantils')['weighted']
+      return [1,3,5] #$('#map').data('quantils')['weighted']
     else
-      return [5] #$('#map').data('quantils')['normal']
+      return [1,3,5] #$('#map').data('quantils')['normal']
 
 MapStyle =
   renderer: ->
@@ -63,14 +70,14 @@ MapStyle =
 
   layer_style: ->
     layer_style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default'])
-    layer_style.fillOpacity = 0.8
+    layer_style.fillOpacity = 0.3
     layer_style.graphicOpacity = 1
     layer_style
 
   style: (color) ->
     style = OpenLayers.Util.extend({}, @.layer_style())
-    style.strokeColor = 'red'
-    style.fillColor = 'red'
+    style.strokeColor = color
+    style.fillColor = color
     style
 
 MapControls =
@@ -102,7 +109,6 @@ GeoReceiver =
 
   process_districts: (data) =>
     MapData.map_data = MapData.map_data.concat data['objects']
-    console.log data.meta
     if data.meta.next?
       settings =
       dataType: 'jsonp'
@@ -110,4 +116,53 @@ GeoReceiver =
       success: GeoReceiver.process_districts
       $.ajax settings
     else
+      ReportReceiver.init()
+
+ReportReceiver =
+  berlin_bbox : null
+  reports: []
+  crime_stat : {}
+  init: () ->
+    settings =
+      dataType: 'jsonp'
+      url: "#{server_url}/api/v1/states/?name=Berlin"
+      success: ReportReceiver.process_state
+    $.ajax settings
+
+  process_state: (data) =>
+    @berlin_bbox = data.objects[0].bbox
+    settings =
+      dataType: 'jsonp'
+      url: "#{server_url}/api/v1/reports/?location__within=" + JSON.stringify(@berlin_bbox)
+      success: ReportReceiver.get_reports
+    $.ajax settings
+
+  get_reports: (data) ->
+    ReportReceiver.reports = ReportReceiver.reports.concat data.objects
+    if data.meta.next?
+      settings =
+      dataType: 'jsonp'
+      url: server_url + data.meta.next
+      success: ReportReceiver.get_reports
+      $.ajax settings
+    else
+      ReportReceiver.process_reports()
+
+  process_reports: () =>
+    settings =
+      dataType: 'jsonp'
+      success: ReportReceiver.update_crime_stat
+    ReportReceiver.open_report_requests = ReportReceiver.reports.length
+    for report in ReportReceiver.reports
+      settings.url = "#{server_url}/api/v1/districts/?area__contains=" + JSON.stringify(report.location)
+      $.ajax settings
+
+  update_crime_stat: (data) =>
+    if not ReportReceiver.crime_stat[data.objects[0].resource_uri]?
+      ReportReceiver.crime_stat[data.objects[0].resource_uri] = 1
+    else
+      ReportReceiver.crime_stat[data.objects[0].resource_uri] += 1
+    ReportReceiver.open_report_requests -= 1
+    if ReportReceiver.open_report_requests <= 0
       DistrictMap.initialize()
+      OsmHeatMap.initialize()

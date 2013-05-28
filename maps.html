@@ -12,21 +12,21 @@
     <div class="navbar-inner">
         <div class="brand">OpenStreetCrimes</div>
         <ul class="nav">
-            <li class="active"><a  data-toggle="tab" href="#recent">Recent Crime Data - by District</a></li>
+            <li ><a  data-toggle="tab" href="#recent">Recent Crime Data - by District</a></li>
             <li><a  data-toggle="tab" href="#historic">Historic Crime Data - by District</a></li>
-            <li><a  data-toggle="tab" href="#heat">Recent Data Heat Map</a></li>
+            <li class="active"><a  data-toggle="tab" href="#heat">Recent Data Heat Map</a></li>
         </ul>
     </div>
 </div>
 <div class="tab-content">
-<div class="tab-pane active" id="recent">index</div>
+<div class="tab-pane active" id="recent"><div id="map" class="smallmap span4"></div></div>
 <div class="tab-pane" id="historic">history</div>
-<div class="tab-pane" id="heat">heat</div>
+<div class="tab-pane" id="heat"><div id="heat_map__" class="smallmap span4"></div></div>
 </div>
 
 <div class="row">
-
-    <div id="map" class="smallmap span4"></div> <!--data="{district: @districts, center_x: @center.x, center_y: @center.y, quantils: @quantils, colors: @colors"-->
+<div id="heat_map" class="smallmap span4"></div>
+    <!--div id="map" class="smallmap span4"></div> <!--data="{district: @districts, center_x: @center.x, center_y: @center.y, quantils: @quantils, colors: @colors"-->
 
     <div class="span12">
         <div class="row-fluid">
@@ -67,8 +67,8 @@
 <script src="js/heatmap.js"></script>
 <script src="js/heatmap-openlayers.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<!--script src="js/heat_map.js"></script-->
 <script src="js/district_map.js"></script>
+<script src="js/heat_map.js"></script>
 <script src="js/ui.js"></script>
 </body>
 </html>
