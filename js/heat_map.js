@@ -4,37 +4,11 @@ var MapStyle, OsmHeatMap;
 OsmHeatMap = {
   map: void 0,
   initialize: function() {
-    var epsg4326, epsg900913, layer;
+    var crime_data, epsg4326, epsg900913, heatmap, layer, report, x, _i, _j, _len, _ref;
     epsg4326 = new OpenLayers.Projection('EPSG:4326');
     epsg900913 = new OpenLayers.Projection('EPSG:900913');
-    this.map = new OpenLayers.Map('heat_map', {
-      projection: epsg900913,
-      displayProjection: epsg4326
-    });
+    this.map = new OpenLayers.Map('heat_map');
     layer = new OpenLayers.Layer.OSM();
-    this.map.addLayer(layer);
-    this.map.setCenter(new OpenLayers.LonLat(13, 52).transform(epsg4326, epsg900913), 8);
-    return this.add_heatmap_layer();
-  },
-  add_district_layer: function() {
-    var feature, features, vectorLayer, _i, _len;
-    vectorLayer = new OpenLayers.Layer.Vector("Berlin Districts", {
-      style: MapStyle.layer_style(),
-      renderers: MapStyle.renderer()
-    });
-    features = MapData.district_feature_collection();
-    for (_i = 0, _len = features.length; _i < _len; _i++) {
-      feature = features[_i];
-      feature.style.fillColor = 'white';
-      feature.style.strokeColor = 'white';
-    }
-    vectorLayer.addFeatures(features);
-    return this.map.addLayer(vectorLayer);
-  },
-  add_heatmap_layer: function() {
-    var crime_data, epsg4326, epsg900913, heatmapLayer, report, x, _i, _j, _len, _ref;
-    epsg4326 = new OpenLayers.Projection('EPSG:4326');
-    epsg900913 = new OpenLayers.Projection('EPSG:900913');
     crime_data = {
       max: 10,
       data: []
@@ -44,18 +18,21 @@ OsmHeatMap = {
       report = _ref[_i];
       for (x = _j = 0; _j <= 10; x = ++_j) {
         crime_data.data.push({
-          lonlat: new OpenLayers.LonLat(13, 52)
+          count: 1,
+          lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913, epsg4326)
         });
       }
     }
-    heatmapLayer = new OpenLayers.Layer.Heatmap("Heatmap Layer", this.map, crime_data, {
+    heatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", this.map, layer, {
       visible: true,
-      radius: 40
+      radius: 5
     }, {
       isBaseLayer: false,
-      opacity: 0.6
+      opacity: 0.3,
+      projection: new OpenLayers.Projection("EPSG:4326")
     });
-    return this.map.addLayer(heatmapLayer);
+    this.map.addLayers([layer, heatmap]);
+    return heatmap.setDataSet(crime_data);
   }
 };
 
