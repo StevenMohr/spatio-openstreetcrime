@@ -4,12 +4,15 @@ var MapStyle, OsmHeatMap;
 OsmHeatMap = {
   map: void 0,
   initialize: function() {
-    var crime_data, epsg4326, epsg900913, heatmap, layer, report, x, _i, _j, _len, _ref;
+    var epsg4326, epsg900913, report, x, _i, _j, _len, _ref;
+    if (this.map !== void 0) {
+      return;
+    }
     epsg4326 = new OpenLayers.Projection('EPSG:4326');
     epsg900913 = new OpenLayers.Projection('EPSG:900913');
     this.map = new OpenLayers.Map('heat_map');
-    layer = new OpenLayers.Layer.OSM();
-    crime_data = {
+    this.layer = new OpenLayers.Layer.OSM();
+    this.crime_data = {
       max: 10,
       data: []
     };
@@ -17,13 +20,13 @@ OsmHeatMap = {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       report = _ref[_i];
       for (x = _j = 0; _j <= 10; x = ++_j) {
-        crime_data.data.push({
+        this.crime_data.data.push({
           count: 1,
           lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913, epsg4326)
         });
       }
     }
-    heatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", this.map, layer, {
+    this.heatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", this.map, this.layer, {
       visible: true,
       radius: 5
     }, {
@@ -31,8 +34,9 @@ OsmHeatMap = {
       opacity: 0.3,
       projection: new OpenLayers.Projection("EPSG:4326")
     });
-    this.map.addLayers([layer, heatmap]);
-    return heatmap.setDataSet(crime_data);
+    this.map.addLayers([this.layer, this.heatmap]);
+    this.map.setCenter(new OpenLayers.LonLat(13, 52).transform(epsg4326, epsg900913), 8);
+    return this.heatmap.setDataSet(this.crime_data);
   }
 };
 

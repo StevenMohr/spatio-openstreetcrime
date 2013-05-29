@@ -224,8 +224,7 @@ ReportReceiver = {
     }
     ReportReceiver.open_report_requests -= 1;
     if (ReportReceiver.open_report_requests <= 0) {
-      DistrictMap.initialize();
-      return OsmHeatMap.initialize();
+      return DistrictMap.initialize();
     }
   }
 };

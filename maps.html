@@ -12,32 +12,22 @@
     <div class="navbar-inner">
         <div class="brand">OpenStreetCrimes</div>
         <ul class="nav">
-            <li ><a  data-toggle="tab" href="#recent">Recent Crime Data - by District</a></li>
+            <li class="active"><a  data-toggle="tab" href="#recent">Recent Crime Data - by District</a></li>
             <li><a  data-toggle="tab" href="#historic">Historic Crime Data - by District</a></li>
-            <li class="active"><a  data-toggle="tab" href="#heat">Recent Data Heat Map</a></li>
+            <li ><a id="heat_link" data-toggle="tab" href="#heat">Recent Data Heat Map</a></li>
         </ul>
     </div>
 </div>
 <div class="tab-content">
 <div class="tab-pane active" id="recent"><div id="map" class="smallmap span4"></div></div>
 <div class="tab-pane" id="historic">history</div>
-<div class="tab-pane" id="heat"><div id="heat_map__" class="smallmap span4"></div></div>
+<div class="tab-pane" id="heat"><div id="heat_map" class="smallmap span4"></div></div>
 </div>
 
 <div class="row">
-<div id="heat_map" class="smallmap span4"></div>
-    <!--div id="map" class="smallmap span4"></div> <!--data="{district: @districts, center_x: @center.x, center_y: @center.y, quantils: @quantils, colors: @colors"-->
-
     <div class="span12">
         <div class="row-fluid">
             <div class="span3">
-              <!--  <%= yield %>
-                <% unless @site == :index %>
-                <button name="Toggle" type='button' id='button' class="btn btn-primary btn-large">Change to Weighted</button>
-                <% link = if @title.downcase.include? "historic" then "/district_heatmap" else "/historic_heatmap" end %>
-                <% text = if @title.downcase.include? "historic" then "Recent Crime Data" else "Historic Crime Data (2011)" end %>
-                <%= link_to "See #{text}", link, class: 'btn btn-large' %>
-                <% end %> -->
             </div>
             <div class="span7 offset2">
 
