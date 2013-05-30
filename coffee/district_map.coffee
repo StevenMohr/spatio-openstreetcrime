@@ -4,6 +4,14 @@ $(document).ready ->
   GeoReceiver.init()
   $('button').click -> MapControls.toggle_district_layer()
 
+StatTable =
+  initialize: () ->
+    for key, district of ReportReceiver.district_map
+      table = "<tr><td>#{district.name}</td><td>#{ReportReceiver.crime_stat[key]}</td><td></td></tr>"
+      $('#stat_table tbody').append(table)
+      console.log table
+
+
 DistrictMap =
   map: undefined
   district_layer: undefined
@@ -122,6 +130,7 @@ ReportReceiver =
   berlin_bbox : null
   reports: []
   crime_stat : {}
+  district_map: {}
   init: () ->
     settings =
       dataType: 'jsonp'
@@ -159,9 +168,12 @@ ReportReceiver =
 
   update_crime_stat: (data) =>
     if not ReportReceiver.crime_stat[data.objects[0].resource_uri]?
+      ReportReceiver.district_map[data.objects[0].resource_uri] = data.objects[0]
       ReportReceiver.crime_stat[data.objects[0].resource_uri] = 1
     else
       ReportReceiver.crime_stat[data.objects[0].resource_uri] += 1
     ReportReceiver.open_report_requests -= 1
     if ReportReceiver.open_report_requests <= 0
+      StatTable.initialize()
       DistrictMap.initialize()
+
