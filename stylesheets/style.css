@@ -76,15 +76,14 @@ h6 {
 /**
  * Map Examples Specific
  */
-.smallmap {
-    width: 600px;
-    height: 400px;
+#map {
+    width: 1200px;
+    height: 800px;
     border: 1px solid #ccc;
 }
-
-.smallmap {
-    width: 800px;
-    height: 600px;
+#heat_map {
+    width: 1200px;
+    height: 800px;
     border: 1px solid #ccc;
 }
 
@@ -96,7 +95,7 @@ h6 {
     margin-bottom: 0.5em;
 }
 /* mobile specific */
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
     body {
         height           : 100%;
         margin           : 0;
@@ -132,7 +131,7 @@ h6 {
         display : none;
     }
 }
-@media only screen and (orientation: landscape) and (max-width: 600px) {
+@media only screen and (orientation: landscape) and (max-width: 800px) {
     #shortdesc {
        float: right;
        width: 25%;
