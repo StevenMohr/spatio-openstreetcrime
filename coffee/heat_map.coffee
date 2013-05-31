@@ -9,17 +9,16 @@ OsmHeatMap =
     @layer = new OpenLayers.Layer.OSM()
 
     @crime_data =
-      max: 10,
+      max: 1,
       data: []
     for report in ReportReceiver.reports
-      for x in [0..10]
-        @crime_data.data.push
-          count: 1
-          lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913 ,epsg4326)
+      @crime_data.data.push
+        count: 1
+        lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913 ,epsg4326)
 
     @heatmap = new OpenLayers.Layer.Heatmap( "Heatmap Layer", @map, @layer, {visible: true, radius:5}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
     @map.addLayers [@layer, @heatmap]
-    @map.setCenter(new OpenLayers.LonLat(13, 52).transform(epsg4326, epsg900913), 8)
+    @map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 9)
     @heatmap.setDataSet @crime_data
 
 

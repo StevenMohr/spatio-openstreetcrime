@@ -7,9 +7,8 @@ $(document).ready ->
 StatTable =
   initialize: () ->
     for key, district of ReportReceiver.district_map
-      table = "<tr><td>#{district.name}</td><td>#{ReportReceiver.crime_stat[key]}</td><td></td></tr>"
+      table = "<tr><td>#{district.name}</td><td>#{ReportReceiver.crime_stat[key]}</td></tr>"
       $('#stat_table tbody').append(table)
-      console.log table
 
 
 DistrictMap =
@@ -19,25 +18,75 @@ DistrictMap =
   initialize: () ->
     epsg4326 = new OpenLayers.Projection('EPSG:4326')
     epsg900913 = new OpenLayers.Projection('EPSG:900913')
-
     @.map = new OpenLayers.Map('map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
     @.map.addLayer layer
-    @.map.setCenter(new OpenLayers.LonLat(13, 52).transform(epsg4326, epsg900913), 8)
-
-    vector_layer = new OpenLayers.Layer.Vector "Berlin Districts"
+    @.map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10)
     @.add_district_layer()
 
   center_map: (center_x, center_y) ->
     @.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8)
 
   add_district_layer: () ->
-
     @.district_layer = new OpenLayers.Layer.Vector "Berlin Districts"
     @.district_layer.removeAllFeatures()
     features = MapData.district_feature_collection()
     @.district_layer.addFeatures features
     @.map.addLayer @.district_layer
+
+HistoryMap =
+  map: undefined
+  district_layer: undefined
+
+  initialize: () ->
+    epsg4326 = new OpenLayers.Projection('EPSG:4326')
+    epsg900913 = new OpenLayers.Projection('EPSG:900913')
+    @.map = new OpenLayers.Map('history_map', projection: epsg900913, displayProjection: epsg4326)
+    layer = new OpenLayers.Layer.OSM()
+    @.map.addLayer layer
+    @.map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10)
+
+    @.add_district_layer()
+
+  add_district_layer: () ->
+    @.district_layer = new OpenLayers.Layer.Vector "Berlin History Districts"
+    @.district_layer.removeAllFeatures()
+    features = HistoricMapData.district_feature_collection()
+    @.district_layer.addFeatures features
+    @.map.addLayer @.district_layer
+
+
+HistoricMapData =
+  map_data: []
+  weighted: false
+  district_feature_collection: ->
+    featurecollection = []
+    geojson_format = new OpenLayers.Format.GeoJSON()
+    for district in @map_data
+      feature = {"geometry": null, "type": "Feature", "properties": {}}
+      style = MapStyle.style(@.district_color(HistoryReceiver.crime_stat[district.name]))
+      feature.geometry = district['area']
+      feature = geojson_format.parseFeature feature
+      feature.style = style
+      featurecollection.push feature
+    featurecollection
+
+  district_color: (count) ->
+    colors =['#00ff00', '#ffff00', '#df7401', "#ff0000" ]
+    if not count?
+      count = 0
+    i = 0
+    for quantil in @.quantils()
+      if count < quantil
+        break
+      i++
+    colors[i]
+
+  quantils: ->
+    if @.weighted
+      return [1,3,5] #$('#map').data('quantils')['weighted']
+    else
+      return [1,3,5] #$('#map').data('quantils')['normal']
 
 MapData =
   map_data: []
@@ -167,13 +216,36 @@ ReportReceiver =
       $.ajax settings
 
   update_crime_stat: (data) =>
-    if not ReportReceiver.crime_stat[data.objects[0].resource_uri]?
-      ReportReceiver.district_map[data.objects[0].resource_uri] = data.objects[0]
-      ReportReceiver.crime_stat[data.objects[0].resource_uri] = 1
-    else
-      ReportReceiver.crime_stat[data.objects[0].resource_uri] += 1
+    if data.objects.length > 0
+      if not ReportReceiver.crime_stat[data.objects[0].resource_uri]?
+        ReportReceiver.district_map[data.objects[0].resource_uri] = data.objects[0]
+        ReportReceiver.crime_stat[data.objects[0].resource_uri] = 1
+      else
+        ReportReceiver.crime_stat[data.objects[0].resource_uri] += 1
     ReportReceiver.open_report_requests -= 1
     if ReportReceiver.open_report_requests <= 0
       StatTable.initialize()
       DistrictMap.initialize()
 
+HistoryReceiver =
+
+  crime_stat : {}
+
+  init: () ->
+    settings =
+      dataType: 'jsonp'
+      url: "#{server_url}/api/v1/history/"
+      success: HistoryReceiver.process_records
+    $.ajax settings
+
+  process_records: (data) =>
+    @berlin_bbox = data.objects[0].bbox
+    settings =
+      dataType: 'jsonp'
+      url: "#{server_url}/api/v1/reports/?location__within=" + JSON.stringify(@berlin_bbox)
+      success: ReportReceiver.get_reports
+    $.ajax settings
+
+  get_reports: (data) ->
+    for district in data.objects
+      HistoryReceiver.crime_stat[district.name] = district.count

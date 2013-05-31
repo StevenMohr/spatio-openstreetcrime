@@ -23,7 +23,7 @@
       return this.add_district_layer();
     },
     center_map: function(center_x, center_y) {
-      return this.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8);
+      return this.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 12);
     },
     add_district_layer: function() {
       this.district_layer = new OpenLayers.Layer.Vector("Berlin Districts", {

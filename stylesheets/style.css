@@ -17,10 +17,11 @@ a img {border:none;}
  */
 body {
     font-family: "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
-    font-size: 80%;
+    font-size: 100%;
     color: #222;
     background: #fff;
     margin: 1em 1.5em;
+    background: url(/images/cream_dust.png) repeat 0 0;
 }
 pre, code {
     margin: 1.5em 0;
@@ -34,40 +35,6 @@ a[href] {
     color: #436976;
     background-color: transparent;
 }
-h1, h2, h3, h4, h5, h6 {
-    color: #003a6b;
-    background-color: transparent;
-    font: 100% 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
-    margin: 0;
-    padding-top: 0.5em;
-}
-h1 {
-    font-size: 130%;
-    margin-bottom: 0.5em;
-    border-bottom: 1px solid #fcb100;
-}
-h2 {
-    font-size: 120%;
-    margin-bottom: 0.5em;
-    border-bottom: 1px solid #aaa;
-}
-h3 {
-    font-size: 110%;
-    margin-bottom: 0.5em;
-    text-decoration: underline;
-}
-h4 {
-    font-size: 100%;
-    font-weight: bold;
-}
-h5 {
-    font-size: 100%;
-    font-weight: bold;
-}
-h6 {
-    font-size: 80%;
-    font-weight: bold;
-}
 
 .olControlAttribution {
     bottom: 5px;
@@ -77,13 +44,20 @@ h6 {
  * Map Examples Specific
  */
 #map {
-    width: 1200px;
+    width: 1600px;
     height: 800px;
     border: 1px solid #ccc;
 }
 #heat_map {
-    width: 1200px;
+    width: 1600px;
     height: 800px;
+    border: 1px solid #ccc;
+}
+
+#history_map {
+    width: 1600px;
+    height: 800px;
+    border-radius: 10px;
     border: 1px solid #ccc;
 }
 
@@ -147,3 +121,13 @@ body {
     -webkit-text-size-adjust: none;
 }
 
+.title {
+    text-align: center;
+}
+.title h1 {
+    font-family: 'Corben', Georgia, Times, serif;
+    font-size: 54px;
+}
+p, div {
+    font-family: 'Nobile', Helvetica, Arial, sans-serif;
+}
