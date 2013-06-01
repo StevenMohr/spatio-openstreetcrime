@@ -12,9 +12,10 @@ OsmHeatMap =
       max: 1,
       data: []
     for report in ReportReceiver.reports
-      @crime_data.data.push
-        count: 1
-        lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913 ,epsg4326)
+      if report.location.type == "Point"
+        @crime_data.data.push
+          count: 1
+          lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913 ,epsg4326)
 
     @heatmap = new OpenLayers.Layer.Heatmap( "Heatmap Layer", @map, @layer, {visible: true, radius:5}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
     @map.addLayers [@layer, @heatmap]

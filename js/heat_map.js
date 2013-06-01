@@ -19,10 +19,12 @@ OsmHeatMap = {
     _ref = ReportReceiver.reports;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       report = _ref[_i];
-      this.crime_data.data.push({
-        count: 1,
-        lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913, epsg4326)
-      });
+      if (report.location.type === "Point") {
+        this.crime_data.data.push({
+          count: 1,
+          lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913, epsg4326)
+        });
+      }
     }
     this.heatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", this.map, this.layer, {
       visible: true,
