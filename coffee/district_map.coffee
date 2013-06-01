@@ -8,7 +8,10 @@ StatTable =
   initialize: () ->
     for key, district of ReportReceiver.district_map
       table = "<tr><td>#{district.name}</td><td>#{ReportReceiver.crime_stat[key]}</td></tr>"
-      $('#stat_table tbody').append(table)
+      $('.recent-stat-table tbody').append(table)
+    for name, count of HistoryReceiver.crime_stat
+      table = "<tr><td>#{name}</td><td>#{count}</td></tr>"
+      $('.history-stat-table tbody').append(table)
 
 
 DistrictMap =
@@ -57,12 +60,11 @@ HistoryMap =
 
 
 HistoricMapData =
-  map_data: []
   weighted: false
   district_feature_collection: ->
     featurecollection = []
     geojson_format = new OpenLayers.Format.GeoJSON()
-    for district in @map_data
+    for district in MapData.map_data
       feature = {"geometry": null, "type": "Feature", "properties": {}}
       style = MapStyle.style(@.district_color(HistoryReceiver.crime_stat[district.name]))
       feature.geometry = district['area']
@@ -175,6 +177,7 @@ GeoReceiver =
     else
       ReportReceiver.init()
 
+
 ReportReceiver =
   berlin_bbox : null
   reports: []
@@ -224,28 +227,21 @@ ReportReceiver =
         ReportReceiver.crime_stat[data.objects[0].resource_uri] += 1
     ReportReceiver.open_report_requests -= 1
     if ReportReceiver.open_report_requests <= 0
-      StatTable.initialize()
+      #StatTable.initialize()
       DistrictMap.initialize()
+      HistoryReceiver.init()
 
 HistoryReceiver =
-
   crime_stat : {}
 
   init: () ->
     settings =
       dataType: 'jsonp'
       url: "#{server_url}/api/v1/history/"
-      success: HistoryReceiver.process_records
-    $.ajax settings
-
-  process_records: (data) =>
-    @berlin_bbox = data.objects[0].bbox
-    settings =
-      dataType: 'jsonp'
-      url: "#{server_url}/api/v1/reports/?location__within=" + JSON.stringify(@berlin_bbox)
-      success: ReportReceiver.get_reports
+      success: HistoryReceiver.get_reports
     $.ajax settings
 
   get_reports: (data) ->
     for district in data.objects
       HistoryReceiver.crime_stat[district.name] = district.count
+    StatTable.initialize()

@@ -44,18 +44,18 @@ a[href] {
  * Map Examples Specific
  */
 #map {
-    width: 1600px;
+    width: 1400px;
     height: 800px;
     border: 1px solid #ccc;
 }
 #heat_map {
-    width: 1600px;
+    width: 1400px;
     height: 800px;
     border: 1px solid #ccc;
 }
 
 #history_map {
-    width: 1600px;
+    width: 1400px;
     height: 800px;
     border-radius: 10px;
     border: 1px solid #ccc;

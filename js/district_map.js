@@ -13,13 +13,19 @@ $(document).ready(function() {
 
 StatTable = {
   initialize: function() {
-    var district, key, table, _ref, _results;
+    var count, district, key, name, table, _ref, _ref1, _results;
     _ref = ReportReceiver.district_map;
-    _results = [];
     for (key in _ref) {
       district = _ref[key];
       table = "<tr><td>" + district.name + "</td><td>" + ReportReceiver.crime_stat[key] + "</td></tr>";
-      _results.push($('#stat_table tbody').append(table));
+      $('.recent-stat-table tbody').append(table);
+    }
+    _ref1 = HistoryReceiver.crime_stat;
+    _results = [];
+    for (name in _ref1) {
+      count = _ref1[name];
+      table = "<tr><td>" + name + "</td><td>" + count + "</td></tr>";
+      _results.push($('.history-stat-table tbody').append(table));
     }
     return _results;
   }
@@ -81,13 +87,12 @@ HistoryMap = {
 };
 
 HistoricMapData = {
-  map_data: [],
   weighted: false,
   district_feature_collection: function() {
     var district, feature, featurecollection, geojson_format, style, _i, _len, _ref;
     featurecollection = [];
     geojson_format = new OpenLayers.Format.GeoJSON();
-    _ref = this.map_data;
+    _ref = MapData.map_data;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       district = _ref[_i];
       feature = {
@@ -316,8 +321,8 @@ ReportReceiver = {
     }
     ReportReceiver.open_report_requests -= 1;
     if (ReportReceiver.open_report_requests <= 0) {
-      StatTable.initialize();
-      return DistrictMap.initialize();
+      DistrictMap.initialize();
+      return HistoryReceiver.init();
     }
   }
 };
@@ -329,28 +334,17 @@ HistoryReceiver = {
     settings = {
       dataType: 'jsonp',
       url: "" + server_url + "/api/v1/history/",
-      success: HistoryReceiver.process_records
-    };
-    return $.ajax(settings);
-  },
-  process_records: function(data) {
-    var settings;
-    _this.berlin_bbox = data.objects[0].bbox;
-    settings = {
-      dataType: 'jsonp',
-      url: ("" + server_url + "/api/v1/reports/?location__within=") + JSON.stringify(_this.berlin_bbox),
-      success: ReportReceiver.get_reports
+      success: HistoryReceiver.get_reports
     };
     return $.ajax(settings);
   },
   get_reports: function(data) {
-    var district, _i, _len, _ref, _results;
+    var district, _i, _len, _ref;
     _ref = data.objects;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       district = _ref[_i];
-      _results.push(HistoryReceiver.crime_stat[district.name] = district.count);
+      HistoryReceiver.crime_stat[district.name] = district.count;
     }
-    return _results;
+    return StatTable.initialize();
   }
 };
