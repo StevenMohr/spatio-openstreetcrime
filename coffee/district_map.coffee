@@ -60,7 +60,6 @@ HistoryMap =
 
 
 HistoricMapData =
-  weighted: false
   district_feature_collection: ->
     featurecollection = []
     geojson_format = new OpenLayers.Format.GeoJSON()
@@ -85,10 +84,8 @@ HistoricMapData =
     colors[i]
 
   quantils: ->
-    if @.weighted
-      return [1,3,5] #$('#map').data('quantils')['weighted']
-    else
-      return [1,3,5] #$('#map').data('quantils')['normal']
+      return [25000,35000,55000]
+
 
 MapData =
   map_data: []

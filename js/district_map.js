@@ -87,7 +87,6 @@ HistoryMap = {
 };
 
 HistoricMapData = {
-  weighted: false,
   district_feature_collection: function() {
     var district, feature, featurecollection, geojson_format, style, _i, _len, _ref;
     featurecollection = [];
@@ -126,11 +125,7 @@ HistoricMapData = {
     return colors[i];
   },
   quantils: function() {
-    if (this.weighted) {
-      return [1, 3, 5];
-    } else {
-      return [1, 3, 5];
-    }
+    return [25000, 35000, 55000];
   }
 };
 
