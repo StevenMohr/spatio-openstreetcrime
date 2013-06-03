@@ -89,16 +89,15 @@ OpenLayers.Layer.Heatmap = OpenLayers.Class(OpenLayers.Layer, {
 	    this.heatmap.store.setDataSet(set);
 	},
 	// we don't want to have decimal numbers such as xxx.9813212 since they slow canvas performance down + don't look nice
-	roundPixels: function(p){
-	    if(p.x < 0 || p.y < 0){
-	        return false;
-            }
-		
-            p.x = (p.x >> 0);
-	    p.y = (p.y >> 0);
-	
-            return p;
-	},
+        roundPixels: function(p){
+                if(p.x < 0 || p.y < 0)
+                        return false;
+
+                // fast rounding - thanks to Seb Lee-Delisle for this neat hack
+                p.x = ~~ (p.x+0.5);
+                p.y = ~~ (p.y+0.5);
+                return p;
+        },
 	// same procedure as setDataSet
 	addDataPoint: function(lonlat){
 	    var pixel = this.roundPixels(this.mapLayer.getViewPortPxFromLonLat(lonlat)),
