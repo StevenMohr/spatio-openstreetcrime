@@ -87,6 +87,7 @@ HistoricMapData =
 MapData =
   map_data: []
   weighted: false
+  quantil_list : []
   district_feature_collection: ->
     featurecollection = []
     geojson_format = new OpenLayers.Format.GeoJSON()
@@ -111,10 +112,15 @@ MapData =
     colors[i]
 
   quantils: ->
-    if @weighted
-      return [1,3,5] #$('#map').data('quantils')['weighted']
-    else
-      return [1,3,5] #$('#map').data('quantils')['normal']
+    if @quantil_list.length == 0
+      nr_reports = 0
+      for _, reports of ReportReceiver.crime_stat
+        nr_reports += reports
+      nr_reports = nr_reports / 12
+      @quantil_list = [nr_reports * 0.75, nr_reports * 1, nr_reports * 1.25]
+    return @quantil_list
+
+
 
 MapStyle =
   renderer: ->
