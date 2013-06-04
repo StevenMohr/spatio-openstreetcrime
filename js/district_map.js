@@ -4,13 +4,6 @@ var DistrictMap, GeoReceiver, HistoricMapData, HistoryMap, HistoryReceiver, MapC
 
 server_url = "http://localhost:8000";
 
-$(document).ready(function() {
-  GeoReceiver.init();
-  return $('button').click(function() {
-    return MapControls.toggle_district_layer();
-  });
-});
-
 StatTable = {
   initialize: function() {
     var count, district, key, name, table, _ref, _ref1, _results;
@@ -343,3 +336,10 @@ HistoryReceiver = {
     return StatTable.initialize();
   }
 };
+
+jQuery(function() {
+  GeoReceiver.init();
+  return $('button').click(function() {
+    return MapControls.toggle_district_layer();
+  });
+});

@@ -1,9 +1,5 @@
 server_url = "http://localhost:8000"
 
-$(document).ready ->
-  GeoReceiver.init()
-  $('button').click -> MapControls.toggle_district_layer()
-
 StatTable =
   initialize: () ->
     for key, district of ReportReceiver.district_map
@@ -242,3 +238,8 @@ HistoryReceiver =
     for district in data.objects
       HistoryReceiver.crime_stat[district.name] = district.count
     StatTable.initialize()
+
+jQuery ->
+  GeoReceiver.init()
+  $('button').click -> MapControls.toggle_district_layer()
+
