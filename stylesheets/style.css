@@ -21,7 +21,7 @@ body {
     color: #222;
     background: #fff;
     margin: 1em 1.5em;
-    background: url(/images/cream_dust.png) repeat 0 0;
+    background: url(images/cream_dust.png) repeat 0 0;
 }
 pre, code {
     margin: 1.5em 0;
