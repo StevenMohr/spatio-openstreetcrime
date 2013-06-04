@@ -33,7 +33,7 @@ MapStyle =
     layer_style
 
   style: (color) ->
-    style = OpenLayers.Util.extend({}, @.layer_style())
+    style = OpenLayers.Util.extend({}, @layer_style())
     style.strokeColor = color
     style.fillColor = color
     style

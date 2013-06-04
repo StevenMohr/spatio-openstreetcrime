@@ -20,40 +20,40 @@ DistrictMap =
   district_layer: null
 
   initialize: () ->
-    @.map = new OpenLayers.Map('map', projection: epsg900913, displayProjection: epsg4326)
+    @map = new OpenLayers.Map('map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
-    @.map.addLayer layer
-    @.map.setCenter(berlin_center, 10)
-    @.add_district_layer()
+    @map.addLayer layer
+    @map.setCenter(berlin_center, 10)
+    @add_district_layer()
 
   center_map: (center_x, center_y) ->
-    @.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8)
+    @map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8)
 
   add_district_layer: () ->
-    @.district_layer = new OpenLayers.Layer.Vector "Berlin Districts"
-    @.district_layer.removeAllFeatures()
+    @district_layer = new OpenLayers.Layer.Vector "Berlin Districts"
+    @district_layer.removeAllFeatures()
     features = MapData.district_feature_collection()
-    @.district_layer.addFeatures features
-    @.map.addLayer @.district_layer
+    @district_layer.addFeatures features
+    @map.addLayer @district_layer
 
 HistoryMap =
   map: null
   district_layer: null
 
   initialize: () ->
-    @.map = new OpenLayers.Map('history_map', projection: epsg900913, displayProjection: epsg4326)
+    @map = new OpenLayers.Map('history_map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
-    @.map.addLayer layer
-    @.map.setCenter(berlin_center, 10)
+    @map.addLayer layer
+    @map.setCenter(berlin_center, 10)
 
-    @.add_district_layer()
+    @add_district_layer()
 
   add_district_layer: () ->
-    @.district_layer = new OpenLayers.Layer.Vector "Berlin History Districts"
-    @.district_layer.removeAllFeatures()
+    @district_layer = new OpenLayers.Layer.Vector "Berlin History Districts"
+    @district_layer.removeAllFeatures()
     features = HistoricMapData.district_feature_collection()
-    @.district_layer.addFeatures features
-    @.map.addLayer @.district_layer
+    @district_layer.addFeatures features
+    @map.addLayer @district_layer
 
 
 HistoricMapData =
@@ -62,7 +62,7 @@ HistoricMapData =
     geojson_format = new OpenLayers.Format.GeoJSON()
     for district in MapData.map_data
       feature = {"geometry": null, "type": "Feature", "properties": {}}
-      style = MapStyle.style(@.district_color(HistoryReceiver.crime_stat[district.name]))
+      style = MapStyle.style(@district_color(HistoryReceiver.crime_stat[district.name]))
       feature.geometry = district['area']
       feature = geojson_format.parseFeature feature
       feature.style = style
@@ -74,7 +74,7 @@ HistoricMapData =
     if not count?
       count = 0
     i = 0
-    for quantil in @.quantils()
+    for quantil in @quantils()
       if count < quantil
         break
       i++
@@ -92,7 +92,7 @@ MapData =
     geojson_format = new OpenLayers.Format.GeoJSON()
     for district in @map_data
       feature = {"geometry": null, "type": "Feature", "properties": {}}
-      style = MapStyle.style(@.district_color(ReportReceiver.crime_stat[district.resource_uri]))
+      style = MapStyle.style(@district_color(ReportReceiver.crime_stat[district.resource_uri]))
       feature.geometry = district['area']
       feature = geojson_format.parseFeature feature
       feature.style = style
@@ -104,14 +104,14 @@ MapData =
     if not count?
       count = 0
     i = 0
-    for quantil in @.quantils()
+    for quantil in @quantils()
       if count < quantil
         break
       i++
     colors[i]
 
   quantils: ->
-    if @.weighted
+    if @weighted
       return [1,3,5] #$('#map').data('quantils')['weighted']
     else
       return [1,3,5] #$('#map').data('quantils')['normal']
@@ -128,7 +128,7 @@ MapStyle =
     layer_style
 
   style: (color) ->
-    style = OpenLayers.Util.extend({}, @.layer_style())
+    style = OpenLayers.Util.extend({}, @layer_style())
     style.strokeColor = color
     style.fillColor = color
     style
