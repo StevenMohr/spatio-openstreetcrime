@@ -1,7 +1,7 @@
 OsmHeatMap =
-  map: undefined
+  map: null
   initialize: ->
-    if @map isnt undefined
+    if @map isnt null
       return
     epsg4326 = new OpenLayers.Projection('EPSG:4326')
     epsg900913 = new OpenLayers.Projection('EPSG:900913')
@@ -17,9 +17,9 @@ OsmHeatMap =
           count: 1
           lonlat: new OpenLayers.LonLat(report.location.coordinates[0], report.location.coordinates[1]).transform(epsg900913 ,epsg4326)
 
-    @heatmap = new OpenLayers.Layer.Heatmap( "Heatmap Layer", @map, @layer, {visible: true, radius:5}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
+    @heatmap = new OpenLayers.Layer.Heatmap( "Heatmap Layer", @map, @layer, {visible: true, radius:8}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
     @map.addLayers [@layer, @heatmap]
-    @map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 9)
+    @map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10)
     @heatmap.setDataSet @crime_data
 
 
