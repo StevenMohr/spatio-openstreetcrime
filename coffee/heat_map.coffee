@@ -1,7 +1,7 @@
 OsmHeatMap =
-  map: undefined
+  map: null
   initialize: ->
-    if @map isnt undefined
+    if @map isnt null
       return
     epsg4326 = new OpenLayers.Projection('EPSG:4326')
     epsg900913 = new OpenLayers.Projection('EPSG:900913')
