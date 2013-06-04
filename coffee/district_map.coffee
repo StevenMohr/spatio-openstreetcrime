@@ -1,5 +1,10 @@
 server_url = "http://localhost:8000"
 
+epsg4326 = new OpenLayers.Projection('EPSG:4326')
+epsg900913 = new OpenLayers.Projection('EPSG:900913')
+
+berlin_center = new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913)
+
 StatTable =
   initialize: () ->
     for key, district of ReportReceiver.district_map
@@ -15,12 +20,10 @@ DistrictMap =
   district_layer: null
 
   initialize: () ->
-    epsg4326 = new OpenLayers.Projection('EPSG:4326')
-    epsg900913 = new OpenLayers.Projection('EPSG:900913')
     @.map = new OpenLayers.Map('map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
     @.map.addLayer layer
-    @.map.setCenter(new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913), 10)
+    @.map.setCenter(berlin_center, 10)
     @.add_district_layer()
 
   center_map: (center_x, center_y) ->
@@ -43,7 +46,7 @@ HistoryMap =
     @.map = new OpenLayers.Map('history_map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
     @.map.addLayer layer
-    @.map.setCenter(new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913), 10)
+    @.map.setCenter(berlin_center, 10)
 
     @.add_district_layer()
 
