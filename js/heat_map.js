@@ -4,12 +4,10 @@ var MapStyle, OsmHeatMap;
 OsmHeatMap = {
   map: null,
   initialize: function() {
-    var epsg4326, epsg900913, report, _i, _len, _ref;
+    var report, _i, _len, _ref;
     if (this.map !== null) {
       return;
     }
-    epsg4326 = new OpenLayers.Projection('EPSG:4326');
-    epsg900913 = new OpenLayers.Projection('EPSG:900913');
     this.map = new OpenLayers.Map('heat_map');
     this.layer = new OpenLayers.Layer.OSM();
     this.crime_data = {

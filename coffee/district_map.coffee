@@ -41,8 +41,6 @@ HistoryMap =
   district_layer: null
 
   initialize: () ->
-    epsg4326 = new OpenLayers.Projection('EPSG:4326')
-    epsg900913 = new OpenLayers.Projection('EPSG:900913')
     @.map = new OpenLayers.Map('history_map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
     @.map.addLayer layer

@@ -3,8 +3,6 @@ OsmHeatMap =
   initialize: ->
     if @map isnt null
       return
-    epsg4326 = new OpenLayers.Projection('EPSG:4326')
-    epsg900913 = new OpenLayers.Projection('EPSG:900913')
     @map = new OpenLayers.Map('heat_map')
     @layer = new OpenLayers.Layer.OSM()
 
