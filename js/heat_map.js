@@ -28,7 +28,7 @@ OsmHeatMap = {
     }
     this.heatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", this.map, this.layer, {
       visible: true,
-      radius: 5
+      radius: 8
     }, {
       isBaseLayer: false,
       opacity: 0.3,
