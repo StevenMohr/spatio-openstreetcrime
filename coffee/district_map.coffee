@@ -15,8 +15,8 @@ StatTable =
 
 
 DistrictMap =
-  map: undefined
-  district_layer: undefined
+  map: null
+  district_layer: null
 
   initialize: () ->
     epsg4326 = new OpenLayers.Projection('EPSG:4326')
@@ -38,8 +38,8 @@ DistrictMap =
     @.map.addLayer @.district_layer
 
 HistoryMap =
-  map: undefined
-  district_layer: undefined
+  map: null
+  district_layer: null
 
   initialize: () ->
     epsg4326 = new OpenLayers.Projection('EPSG:4326')
