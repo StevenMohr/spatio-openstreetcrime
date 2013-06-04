@@ -35,7 +35,7 @@ OsmHeatMap = {
       projection: new OpenLayers.Projection("EPSG:4326")
     });
     this.map.addLayers([this.layer, this.heatmap]);
-    this.map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10);
+    this.map.setCenter(new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913), 10);
     return this.heatmap.setDataSet(this.crime_data);
   }
 };

@@ -20,7 +20,7 @@ DistrictMap =
     @.map = new OpenLayers.Map('map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
     @.map.addLayer layer
-    @.map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10)
+    @.map.setCenter(new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913), 10)
     @.add_district_layer()
 
   center_map: (center_x, center_y) ->
@@ -43,7 +43,7 @@ HistoryMap =
     @.map = new OpenLayers.Map('history_map', projection: epsg900913, displayProjection: epsg4326)
     layer = new OpenLayers.Layer.OSM()
     @.map.addLayer layer
-    @.map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10)
+    @.map.setCenter(new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913), 10)
 
     @.add_district_layer()
 

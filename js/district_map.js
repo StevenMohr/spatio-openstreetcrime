@@ -37,7 +37,7 @@ DistrictMap = {
     });
     layer = new OpenLayers.Layer.OSM();
     this.map.addLayer(layer);
-    this.map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10);
+    this.map.setCenter(new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913), 10);
     return this.add_district_layer();
   },
   center_map: function(center_x, center_y) {
@@ -66,7 +66,7 @@ HistoryMap = {
     });
     layer = new OpenLayers.Layer.OSM();
     this.map.addLayer(layer);
-    this.map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10);
+    this.map.setCenter(new OpenLayers.LonLat(13.4, 52.5).transform(epsg4326, epsg900913), 10);
     return this.add_district_layer();
   },
   add_district_layer: function() {
