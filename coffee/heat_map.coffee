@@ -19,7 +19,7 @@ OsmHeatMap =
 
     @heatmap = new OpenLayers.Layer.Heatmap( "Heatmap Layer", @map, @layer, {visible: true, radius:8}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
     @map.addLayers [@layer, @heatmap]
-    @map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 9)
+    @map.setCenter(new OpenLayers.LonLat(13.5, 52.5).transform(epsg4326, epsg900913), 10)
     @heatmap.setDataSet @crime_data
 
 
