@@ -13,89 +13,17 @@
 </head>
 <body>
 <div class="title">
-    <h1 class="title">OpenStreetCrimes</h1>
+    <h1 class="title">Generic Client</h1>
 </div>
-<div class="row-fluid">
-    <ul class="pull-right nav nav-pills">
-        <li class="active"><a data-toggle="tab" href="#recent">Aktuelle Meldungen - nach Bezirk</a></li>
-        <li><a data-toggle="tab" id="history_link" href="#historic">Historische Daten - nach Bezirk</a></li>
-        <li><a id="heat_link" data-toggle="tab" href="#heat">Heat Map der aktuellen Meldungen</a></li>
-    </ul>
-</div>
-    <div class="tab-content offset1">
 
-        <div class="tab-pane  active" id="recent">
-            <div class="row-fluid">
-                <div class="span8 smallmap" id="map"></div>
-                <div class="span2">
-                    <table class="recent-stat-table table table-striped table-bordered table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Anzahl</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
+<div class="span8 smallmap" id="map"></div>
 
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane" id="historic">
-            <div class="row-fluid">
-                <div id="history_map" class="smallmap span8"></div>
-                <div class="span2">
-                    <table class="history-stat-table table table-striped table-bordered table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Anzahl</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-        <div class="tab-pane" id="heat">
-            <div class="row-fluid">
-                <div id="heat_map" class="smallmap span8"></div>
-                <div class="span2">
-                    <table class="recent-stat-table table table-striped table-bordered table-hover table-condensed">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Anzahl</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-
-</div>
 
 <script src="js/jquery-1.9.1.min.js"></script>
 <script src="js/OpenLayers.js"></script>
 <script src="js/heatmap.js"></script>
 <script src="js/heatmap-openlayers.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script async src="js/district_map.js"></script>
-<script async src="js/heat_map.js"></script>
-<script async src="js/ui.js"></script>
+<script async src="js/generic_map.js"></script>
 </body>
 </html>
