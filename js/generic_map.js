@@ -7,10 +7,10 @@
     server_url: "http://localhost:8000",
     rest_resource: "api/v1/hotspots/",
     geo_attribute_name: "location",
-    object_color: '#00ff00',
+    object_color: '#0000ff',
     container_attribute_name: "objects",
-    center_x: 0,
-    center_y: 0
+    center_x: 13.4,
+    center_y: 52.5
   };
 
   epsg4326 = new OpenLayers.Projection('EPSG:4326');
@@ -32,7 +32,7 @@
       return this.center_map(configuration.center_x, configuration.center_y);
     },
     center_map: function(center_x, center_y) {
-      return this.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8);
+      return this.map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 10);
     },
     add_data_layer: function() {
       var features;
@@ -76,7 +76,7 @@
     layer_style: function() {
       var layer_style;
       layer_style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
-      layer_style.fillOpacity = 0.3;
+      layer_style.fillOpacity = 0.4;
       layer_style.graphicOpacity = 1;
       return layer_style;
     },
@@ -85,6 +85,7 @@
       style = OpenLayers.Util.extend({}, this.layer_style());
       style.strokeColor = color;
       style.fillColor = color;
+      style.pointRadius = 15;
       return style;
     }
   };

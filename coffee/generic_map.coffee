@@ -2,10 +2,10 @@ configuration =
   server_url : "http://localhost:8000"   # Base URL to server
   rest_resource : "api/v1/hotspots/"      # URL of REST ressource to visualize
   geo_attribute_name : "location"        # Attribute of REST ressource containing geo information to visualize as GeoJSON
-  object_color : '#00ff00'               # Color to use to render objects
+  object_color : '#0000ff'               # Color to use to render objects
   container_attribute_name :"objects"    # Name of the attribute in top-level JSON that contains all objects to visualize
-  center_x : 0                           # X coordinate used to center map
-  center_y : 0                           # Y coordinate used to center map
+  center_x : 13.4                           # X coordinate used to center map
+  center_y : 52.5                           # Y coordinate used to center map
 
 epsg4326 = new OpenLayers.Projection('EPSG:4326')
 epsg900913 = new OpenLayers.Projection('EPSG:900913')
@@ -24,7 +24,7 @@ DistrictMap =
     @center_map(configuration.center_x, configuration.center_y)
 
   center_map: (center_x, center_y) ->
-    @map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 8)
+    @map.setCenter((new OpenLayers.LonLat(center_x, center_y)).transform("EPSG:4326", "EPSG:900913"), 10)
 
   add_data_layer: () ->
     @data_layer = new OpenLayers.Layer.Vector "Map Data"
@@ -56,7 +56,7 @@ MapStyle =
 
   layer_style: ->
     layer_style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default'])
-    layer_style.fillOpacity = 0.3
+    layer_style.fillOpacity = 0.4
     layer_style.graphicOpacity = 1
     layer_style
 
@@ -64,6 +64,7 @@ MapStyle =
     style = OpenLayers.Util.extend({}, @layer_style())
     style.strokeColor = color
     style.fillColor = color
+    style.pointRadius = 15
     style
 
 
