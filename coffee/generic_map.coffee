@@ -1,6 +1,6 @@
 configuration =
   server_url : "http://localhost:8000"   # Base URL to server
-  rest_resource : "api/v1/reports/"      # URL of REST ressource to visualize
+  rest_resource : "api/v1/hotspots/"      # URL of REST ressource to visualize
   geo_attribute_name : "location"        # Attribute of REST ressource containing geo information to visualize as GeoJSON
   object_color : '#00ff00'               # Color to use to render objects
   container_attribute_name :"objects"    # Name of the attribute in top-level JSON that contains all objects to visualize
@@ -76,7 +76,7 @@ GeoReceiver =
     $.ajax settings
 
   process_data: (data) =>
-    MapData.map_data = MapData.map_data.concat data[container_attribute_name]
+    MapData.map_data = MapData.map_data.concat data[configuration.container_attribute_name]
     if data.meta.next?
       settings =
       dataType: 'jsonp'
